@@ -4,6 +4,7 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
 
+
 const Boards = ({ projects, onAddBoard }) => {
 
   const [addBoardInput, setAddBoardInput] = useState(false);
@@ -69,21 +70,24 @@ const Boards = ({ projects, onAddBoard }) => {
         {projects.map((board) => {
           // {console.log(board.id)}
           return (
-            // <Link to={`/Board/${board.id}`}>
-              <Card key={board.id} backgroundImage={board.prefs.backgroundImage}>
+            <Link to={`/Board/${board.id}`}>
+              <Card key={board.id} backgroundImage={board.prefs.backgroundImage} height='200px' >
                 <CardBody>{board.name}</CardBody>
+
               </Card>
-            // </Link>
+            </Link>
 
           );
         })}
 
         {/* Create new board */}
-        <Card backgroundColor='' onClick={handleShowAddBoardInput}>
-          <CardBody>
-            <p>Add new Board</p>
-          </CardBody>
-        </Card>
+        {projects.length < 10 ? (
+          <Card backgroundColor='gray' onClick={handleShowAddBoardInput}>
+            <CardBody >
+              <p>Add new Board</p>
+              <p>{10 - projects.length}remaning</p>
+            </CardBody>
+          </Card>) : ''}
       </SimpleGrid>
 
       {/* Modal for creating a new board */}

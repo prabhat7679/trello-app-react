@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
 import Header from './components/Header'
-
+import Lists from './components/Lists';
 import Boards from './components/Boards'
 import { Route, Routes } from 'react-router-dom';
 
@@ -59,6 +59,13 @@ function App() {
           </>
         }>
         </Route>
+
+        <Route path='/Board/:id' element={
+          <>
+            <Header />
+            <Lists projects={projects}/>
+          </>
+        }></Route>
 
       </Routes>
     </>
