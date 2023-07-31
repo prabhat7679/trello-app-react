@@ -1,0 +1,19 @@
+.Header{
+    display: flex;
+    height: 70px;
+    align-items: center;
+    justify-content: center;
+    background-color: gray;
+
+}
+.Backbtn{
+    height: 30px;
+    width: 70px;
+    border: 1px solid red;
+}
+.image{
+    height: 50px;
+    
+    background-color:none;
+    
+}
