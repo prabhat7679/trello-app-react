@@ -21,7 +21,7 @@ function App() {
         return Response.data;
       })
       .then(data => {
-        // console.log(data)
+        console.log(data)
         setProjects(data);
 
       })
@@ -40,7 +40,7 @@ function App() {
       id: Math.random().toString(),
       name: name,
       prefs: {
-        backgroundImage: '', // Set the background image URL if needed
+        backgroundColor:"#0079BF",
       },
     };
 
@@ -63,7 +63,7 @@ function App() {
         <Route path='/Board/:id' element={
           <>
             <Header />
-            <Lists projects={projects}/>
+            <Lists />
           </>
         }></Route>
 

@@ -7,12 +7,11 @@ import { Link } from 'react-router-dom';
 
 const Boards = ({ projects, onAddBoard }) => {
 
-  const [addBoardInput, setAddBoardInput] = useState(false);
   const [newBoardName, setNewBoardName] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleShowAddBoardInput = () => {
-    // setAddBoardInput(true);
+
     setModalIsOpen(true)
   };
 
@@ -21,17 +20,17 @@ const Boards = ({ projects, onAddBoard }) => {
   };
 
 
-  const handleCancelAddBoard = () => {
-    // setAddBoardInput(false);
+  const cancelAddBoardFn= () => {
+
     setNewBoardName('');
     closeModal()
   };
 
-  const handleBoardNameChange = (e) => {
+  const boardNameChangeFn = (e) => {
     setNewBoardName(e.target.value);
   };
 
-  const handleAddBoard = async () => {
+  const addBoardFn = async () => {
     if (newBoardName.trim() !== '') {
       onAddBoard(newBoardName);
 
@@ -52,7 +51,6 @@ const Boards = ({ projects, onAddBoard }) => {
       }
 
       closeModal();
-      // setAddBoardInput(false);
       setNewBoardName('');
     }
   };
@@ -64,7 +62,6 @@ const Boards = ({ projects, onAddBoard }) => {
         spacing={4}
         templateColumns='repeat(auto-fill, minmax(400px, 1fr))'
         padding='1em'
-      // height='300px'
       >
         {/* Existing boards */}
         {projects.map((board) => {
@@ -83,9 +80,10 @@ const Boards = ({ projects, onAddBoard }) => {
         {/* Create new board */}
         {projects.length < 10 ? (
           <Card backgroundColor='gray' onClick={handleShowAddBoardInput}>
-            <CardBody >
+            <CardBody display="flex" flexDirection='column' alignItems='center'
+              justifyContent='center' gap='10px'>
               <p>Add new Board</p>
-              <p>{10 - projects.length}remaning</p>
+              <p>{10 - projects.length} remaning</p>
             </CardBody>
           </Card>) : ''}
       </SimpleGrid>
@@ -113,13 +111,13 @@ const Boards = ({ projects, onAddBoard }) => {
           type='text'
           placeholder='Enter board name'
           value={newBoardName}
-          onChange={handleBoardNameChange}
+          onChange={boardNameChangeFn}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1em' }}>
 
-          <button onClick={handleAddBoard}>Add</button>
+          <button onClick={addBoardFn}>Add</button>
 
-          <button onClick={handleCancelAddBoard}>Cancel</button>
+          <button onClick={cancelAddBoardFn}>Cancel</button>
         </div>
       </Modal>
     </>
