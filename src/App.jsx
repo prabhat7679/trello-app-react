@@ -21,7 +21,7 @@ function App() {
         return Response.data;
       })
       .then(data => {
-        console.log(data)
+        // console.log(data)
         setProjects(data);
 
       })
@@ -40,13 +40,13 @@ function App() {
       id: Math.random().toString(),
       name: name,
       prefs: {
-        backgroundColor:"#0079BF",
+        backgroundColor:"",
       },
     };
 
     setProjects([...projects, newBoard]);
+    
   };
-
 
   return (
     <>

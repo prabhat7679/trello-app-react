@@ -20,14 +20,14 @@ const Boards = ({ projects, onAddBoard }) => {
   };
 
 
-  const cancelAddBoardFn= () => {
+  const cancelAddBoardFn = () => {
 
     setNewBoardName('');
     closeModal()
   };
 
-  const boardNameChangeFn = (e) => {
-    setNewBoardName(e.target.value);
+  const boardNameChangeFn = (event) => {
+    setNewBoardName(event.target.value);
   };
 
   const addBoardFn = async () => {
