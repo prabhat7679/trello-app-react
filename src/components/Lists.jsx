@@ -106,6 +106,28 @@ export default function Lists() {
     };
 
     //   console.log(list)
+    const [deleteListId, setDeleteListId] = useState(null);
+
+    const handleDeleteConfirmation = async (listId) => {
+        
+        try {
+            await axios.put(`https://api.trello.com/1/lists/${deleteListId}/closed?key=${apiKey}&token=${apiToken}`,
+                {
+                    value: true,
+                }
+            );
+            // Update state to remove the deleted list from the 'list' array
+            setList((prevList) => prevList.filter((item) => item.id !== deleteListId));
+        } catch (error) {
+            console.error('Error deleting list from Trello:', error);
+        } finally {
+            setDeleteListId(null)
+        }
+    };
+
+
+    const openLists = list.filter((board) => !board.closed);
+    console.log(openLists)
 
     return (
         <>
@@ -115,14 +137,15 @@ export default function Lists() {
                 templateColumns="repeat(auto-fill, minmax(300px, 10fr))"
             // overflowX="auto"
             >
-                {list.map((board, index) => {
+                {openLists.map((board) => {
                     // {console.log(board.name)}
+
                     return (
-                        <Card key={index} className="List" height="fit-content">
+                        <Card key={board.id} className="List" height="fit-content">
                             <CardHeader>
                                 <Heading size="sm" margin={4} display='flex' justifyContent='space-between'>
                                     {board.name}
-
+                                    <Button onClick={() => setDeleteListId(board.id)}>x</Button>
                                 </Heading>
                                 <AddCard id={board.id} />
 
@@ -130,6 +153,8 @@ export default function Lists() {
                             </CardHeader>
                         </Card>
                     );
+
+
                 })}
 
 
@@ -172,6 +197,29 @@ export default function Lists() {
 
             </SimpleGrid>
 
+            <AlertDialog
+                motionPreset="slideInBottom"
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+                isOpen={deleteListId !== null}
+                isCentered
+            >
+                <AlertDialogOverlay />
+
+                <AlertDialogContent>
+                    <AlertDialogHeader>Delete List?</AlertDialogHeader>
+                    <AlertDialogCloseButton />
+                    <AlertDialogBody>
+                        Are you sure you want to delete this list?
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={() => setDeleteListId(null)}>Cancel</Button>
+                        <Button colorScheme="red" ml={3} onClick={handleDeleteConfirmation}>
+                            Delete
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
 
         </>
     );

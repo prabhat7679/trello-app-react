@@ -18,12 +18,25 @@ import {
     PopoverAnchor,
 } from '@chakra-ui/react'
 
+import {
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
+    AlertDialogCloseButton,
+} from '@chakra-ui/react'
+
 
 export default function AddCard({id}) {
 
     const [isOpen, setIsOpen] = useState(false)
     const [cardName, setCardName] = useState([]);
     const [newCard, setNewCard]=useState('')
+
+    const [deleteCardId, setDeleteCardId] = useState(null);
+    const cancelRef = React.useRef()
 
     // const id = useParams().id;
     // console.log(id)
@@ -88,15 +101,29 @@ export default function AddCard({id}) {
         setIsOpen(!isOpen);
     };
 
+    const handleDeleteConfirmation = async () => {   
+        try {
+            await axios.delete(`https://api.trello.com/1/cards/${deleteCardId}?key=${apiKey}&token=${apiToken}` );
+            // Update state to remove the deleted list from the 'list' array
+            setCardName((prevCard) => prevCard.filter((item) => item.id !== deleteCardId));
+        } catch (error) {
+            console.error('Error deleting list from Trello:', error);
+        } finally {
+            setDeleteCardId(null)
+        }
+    };
+
     return (
         <>
-            {/* <Button onClick={AddCardFn} width='100%' colorScheme="gray" color='black'>+ Add card here</Button> */}
-            {cardName.map((card, index) => {
+           
+            {cardName.map((card) => {
                 return (
-                    <Card key={index} className="Card" height="fit-content"  backgroundColor='#e9e9f0' margin='3px'>
+                    <Card key={card.id} className="Card" height="fit-content"  backgroundColor='#e9e9f0' margin='3px'>
                         <CardHeader>
-                            <Heading size="sm" margin={4}>
+                            <Heading size="sm" margin={4} display='flex' justifyContent='space-between'>
                                 {card.name}
+                                <Button onClick={() => setDeleteCardId(card.id)}>x</Button>
+
                             </Heading>
 
                         </CardHeader>
@@ -140,6 +167,30 @@ export default function AddCard({id}) {
                     </PopoverContent>
                 </Popover>
             </Card>
+
+            <AlertDialog
+                motionPreset="slideInBottom"
+                leastDestructiveRef={cancelRef}
+                onClose={onClose}
+                isOpen={deleteCardId !== null}
+                isCentered
+            >
+                <AlertDialogOverlay />
+
+                <AlertDialogContent>
+                    <AlertDialogHeader>Delete Card?</AlertDialogHeader>
+                    <AlertDialogCloseButton />
+                    <AlertDialogBody>
+                        Are you sure you want to delete this card?
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                        <Button ref={cancelRef} onClick={() => setDeleteCardId(null)}>Cancel</Button>
+                        <Button colorScheme="red" ml={3} onClick={handleDeleteConfirmation}>
+                            Delete
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     )
 }

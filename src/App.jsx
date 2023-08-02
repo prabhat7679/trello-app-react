@@ -36,12 +36,12 @@ function App() {
       })
   }, []);
 
-  const handleAddBoard = (name) => {
+  const handleAddBoard = (name,backgroundImage) => {
     const newBoard = {
       id: Math.random().toString(),
       name: name,
       prefs: {
-        backgroundColor: "",
+        backgroundImage
       },
     };
 
