@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Lists from './components/Lists';
 import Boards from './components/Boards'
 import { Route, Routes } from 'react-router-dom';
+import AddCard from './components/AddCard';
 
 
 function App() {
@@ -40,12 +41,12 @@ function App() {
       id: Math.random().toString(),
       name: name,
       prefs: {
-        backgroundColor:"",
+        backgroundColor: "",
       },
     };
 
     setProjects([...projects, newBoard]);
-    
+
   };
 
   return (
@@ -66,6 +67,7 @@ function App() {
             <Lists />
           </>
         }></Route>
+
 
       </Routes>
     </>

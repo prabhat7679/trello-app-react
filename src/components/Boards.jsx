@@ -46,6 +46,8 @@ const Boards = ({ projects, onAddBoard }) => {
 
         // The response will contain the details of the newly created board on Trello
         console.log('New board created on Trello:', response.data);
+        
+
       } catch (error) {
         console.error('Error creating board on Trello:', error);
       }
@@ -58,7 +60,7 @@ const Boards = ({ projects, onAddBoard }) => {
 
   return (
     <>
-      <SimpleGrid
+      <SimpleGrid 
         spacing={4}
         templateColumns='repeat(auto-fill, minmax(400px, 1fr))'
         padding='1em'
