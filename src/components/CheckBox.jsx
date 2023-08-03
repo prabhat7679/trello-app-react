@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Checkbox, List, ListItem } from "@chakra-ui/react";
 import axios from "axios";
 import CreateCheckBox from "./CreateCheckBox";
+import RemoveCheckBox from "./RemoveCheckBox";
 
 
 function CheckBox({ checkListId }) {
@@ -26,9 +27,9 @@ function CheckBox({ checkListId }) {
   return (
     <List>
       {checkItems.map((item) => (
-        <ListItem key={item.id} display="flex" width="2xs" margin="auto" justifyContent="space-between">
+        <ListItem key={item.id} display="flex" width="2xs" margin="auto" padding='5px' justifyContent="space-between">
           <Checkbox>{item.name}</Checkbox>
-
+          <RemoveCheckBox checkListId={checkListId} itemId={item.id} setUpdateTrigger={setUpdateTrigger} /> 
         </ListItem>
       ))}
 
