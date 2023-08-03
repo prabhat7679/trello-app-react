@@ -29,7 +29,6 @@ import {
 } from '@chakra-ui/react'
 import PopUpCard from './PopUp';
 
-
 export default function AddCard({ id }) {
 
     const [isOpen, setIsOpen] = useState(false)
@@ -38,9 +37,6 @@ export default function AddCard({ id }) {
 
     const [deleteCardId, setDeleteCardId] = useState(null);
     const cancelRef = React.useRef()
-
-
-
 
     // const id = useParams().id;
     // console.log(id)
@@ -53,7 +49,7 @@ export default function AddCard({ id }) {
             `https://api.trello.com/1/lists/${id}/cards?key=${apiKey}&token=${apiToken}`)
             .then((response) => {
                 setCardName(response.data);
-                console.log(response.data)
+                // console.log(response.data)
             })
             .catch((error) => {
                 console.error("Error fetching data:", error);
@@ -65,7 +61,7 @@ export default function AddCard({ id }) {
 
         if (newCard.trim() !== '') {
             const card = newCard.trim();
-            console.log(newCard)
+            // console.log(newCard)
             try {
                 const response = await axios.post(
 
@@ -105,7 +101,7 @@ export default function AddCard({ id }) {
         setIsOpen(!isOpen);
     };
 
-    const handleDeleteConfirmation = async () => {
+    const deleteConfirmation = async () => {
         try {
             await axios.delete(`https://api.trello.com/1/cards/${deleteCardId}?key=${apiKey}&token=${apiToken}`);
             // Update state to remove the deleted list from the 'list' array
@@ -118,15 +114,15 @@ export default function AddCard({ id }) {
     };
 
 
-
     return (
         <>
-
             {cardName.map((card) => {
                 return (
                     <Card key={card.id} className='Card' backgroundColor='#e9e9f0'>
                         <CardHeader display='flex' justifyContent='space-between' alignItems='center'>
+                            
                             <PopUpCard id={card.id} name={card.name} />
+
                             <Button size='sm' colorScheme='red' onClick={() => setDeleteCardId(card.id)}>
                                 x
                             </Button>
@@ -195,7 +191,7 @@ export default function AddCard({ id }) {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button ref={cancelRef} onClick={() => setDeleteCardId(null)}>Cancel</Button>
-                        <Button colorScheme="red" ml={3} onClick={handleDeleteConfirmation}>
+                        <Button colorScheme="red" ml={3} onClick={deleteConfirmation}>
                             Delete
                         </Button>
                     </AlertDialogFooter>

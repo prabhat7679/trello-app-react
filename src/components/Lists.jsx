@@ -126,8 +126,8 @@ export default function Lists() {
     };
 
 
-    const openLists = list.filter((board) => !board.closed);
-    console.log(openLists)
+    // const openLists = list.filter((board) => !board.closed);
+    // console.log(openLists)
 
     return (
         <>
@@ -135,9 +135,9 @@ export default function Lists() {
                 spacing={4}
                 margin={20}
                 templateColumns="repeat(auto-fill, minmax(300px, 10fr))"
-               
+                // display='flex'
             >
-                {openLists.map((board) => {
+                {list.map((board) => {
                     // {console.log(board.name)}
 
                     return (

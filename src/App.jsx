@@ -53,7 +53,6 @@ function App() {
       {loading ? (<Loader />) :
         (
           <Routes>
-
             <Route path='/' element={
               <>
                 <Header />
@@ -69,10 +68,8 @@ function App() {
               </>
             }></Route>
 
-
           </Routes>
         )
-
       }
     </>
   )

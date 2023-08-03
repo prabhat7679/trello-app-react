@@ -33,14 +33,11 @@ const Boards = ({ projects, onAddBoard }) => {
   const addBoardFn = async () => {
     if (newBoardName.trim() !== '') {
 
-
       const apiKey = 'c194712381db71b3c67ec4558c35d43b';
       const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
       const boardName = newBoardName.trim();
 
-
       try {
-        // Make the API request to create a new board on Trello
         const response = await axios.post(
           `https://api.trello.com/1/boards?key=${apiKey}&token=${apiToken}&name=${boardName}`
         );

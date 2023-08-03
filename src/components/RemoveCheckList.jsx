@@ -12,53 +12,73 @@ import {Popover,
 import axios from "axios";
 
 
-function RemoveCheckList({id, setUpdate}) {
+function RemoveCheckList({id, setChecklistName}) {
+
+    const initRef = React.useRef()
 
     const apiKey = 'c194712381db71b3c67ec4558c35d43b';
     const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
  
-    function deleteCheckList(listID){
-      axios
-      .delete(
-        `https://api.trello.com/1/checklists/${listID}?key=${apiKey}&token=${apiToken}`
-      )
-      .then((response) => {
-        setUpdate(response.data);
-      })
-      .catch((error) => {
-        console.error("Error updating data:", error);
-      });
+    async function deleteCheckList(listID) {
+      try {
+        const response = await axios.delete(
+          `https://api.trello.com/1/checklists/${listID}?key=${apiKey}&token=${apiToken}`
+        );
+        setChecklistName(response.data);
+      } catch (error) {
+        console.error('Error updating data:', error);
+      }
     }
-
-    const initRef = React.useRef()
+    
+    
   return (
-  <Popover closeOnBlur={false} placement='bottom' initialFocusRef={initRef}>
-  {({ isOpen, onClose }) => (
-    <>
-      <PopoverTrigger>
-        <Button>Delete</Button>
-      </PopoverTrigger>
-        <PopoverContent>
-          <PopoverHeader>Want to Delete!</PopoverHeader>
-          <PopoverCloseButton />
+    <Popover closeOnBlur={false} placement="bottom" initialFocusRef={initRef}>
+    {({ isOpen, onClose }) => (
+      <>
+        <PopoverTrigger>
+          <Button colorScheme="red" size="sm">
+            Delete
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent  color="black" borderColor="red.500">
+          <PopoverArrow />
+          <PopoverCloseButton color="white" />
+          <PopoverHeader fontWeight="bold">Want to Delete!</PopoverHeader>
           <PopoverBody>
             <Box>
-              Deleting a checklist 
+              Are you sure you want to delete this checklist?
             </Box>
+          </PopoverBody>
+          <PopoverBody display="flex" justifyContent="space-between">
+
+          <Button
+                colorScheme="gray"
+                size="sm"
+                onClick={onClose}
+              >
+                Cancel
+              </Button>
+
             <Button
-              colorScheme='red'
-              onClick={
-                ()=>{ onClose(), deleteCheckList(id)}}
-              ref={initRef}
+              colorScheme="red"
+              size="sm"
+              onClick={() => {
+                onClose();
+                deleteCheckList(id);
+              }}
             >
               Delete
             </Button>
+
+            
+
           </PopoverBody>
         </PopoverContent>
-    </>
-  )}
-</Popover>
+      </>
+    )}
+  </Popover>
+
   )
 }
 
-export default RemoveCheckList
+export default RemoveCheckList;
