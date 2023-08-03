@@ -109,7 +109,7 @@ export default function Lists() {
     const [deleteListId, setDeleteListId] = useState(null);
 
     const handleDeleteConfirmation = async (listId) => {
-        
+
         try {
             await axios.put(`https://api.trello.com/1/lists/${deleteListId}/closed?key=${apiKey}&token=${apiToken}`,
                 {
@@ -135,7 +135,7 @@ export default function Lists() {
                 spacing={4}
                 margin={20}
                 templateColumns="repeat(auto-fill, minmax(300px, 10fr))"
-            // overflowX="auto"
+               
             >
                 {openLists.map((board) => {
                     // {console.log(board.name)}
@@ -145,6 +145,7 @@ export default function Lists() {
                             <CardHeader>
                                 <Heading size="sm" margin={4} display='flex' justifyContent='space-between'>
                                     {board.name}
+                                    
                                     <Button onClick={() => setDeleteListId(board.id)}>x</Button>
                                 </Heading>
                                 <AddCard id={board.id} />

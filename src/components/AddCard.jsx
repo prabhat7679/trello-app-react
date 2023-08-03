@@ -27,16 +27,20 @@ import {
     AlertDialogOverlay,
     AlertDialogCloseButton,
 } from '@chakra-ui/react'
+import PopUpCard from './PopUp';
 
 
-export default function AddCard({id}) {
+export default function AddCard({ id }) {
 
     const [isOpen, setIsOpen] = useState(false)
     const [cardName, setCardName] = useState([]);
-    const [newCard, setNewCard]=useState('')
+    const [newCard, setNewCard] = useState('')
 
     const [deleteCardId, setDeleteCardId] = useState(null);
     const cancelRef = React.useRef()
+
+
+
 
     // const id = useParams().id;
     // console.log(id)
@@ -49,7 +53,7 @@ export default function AddCard({id}) {
             `https://api.trello.com/1/lists/${id}/cards?key=${apiKey}&token=${apiToken}`)
             .then((response) => {
                 setCardName(response.data);
-               console.log(response.data)
+                console.log(response.data)
             })
             .catch((error) => {
                 console.error("Error fetching data:", error);
@@ -57,15 +61,15 @@ export default function AddCard({id}) {
     }, []);
 
 
-    const addCardFn = async()=>{
-       
+    const addCardFn = async () => {
+
         if (newCard.trim() !== '') {
             const card = newCard.trim();
             console.log(newCard)
             try {
                 const response = await axios.post(
 
-                    `https://api.trello.com/1/cards?idList=${id}&key=${apiKey}&token=${apiToken}`,{name:newCard})
+                    `https://api.trello.com/1/cards?idList=${id}&key=${apiKey}&token=${apiToken}`, { name: newCard })
 
                 setCardName([...cardName, response.data]);
 
@@ -73,10 +77,10 @@ export default function AddCard({id}) {
                 console.error('Error creating list on Trello:', error);
             }
 
-        setNewCard('')
-        onClose()
+            setNewCard('')
+            onClose()
+        }
     }
-}
 
     function cancelCardFn() {
         setNewCard('')
@@ -101,9 +105,9 @@ export default function AddCard({id}) {
         setIsOpen(!isOpen);
     };
 
-    const handleDeleteConfirmation = async () => {   
+    const handleDeleteConfirmation = async () => {
         try {
-            await axios.delete(`https://api.trello.com/1/cards/${deleteCardId}?key=${apiKey}&token=${apiToken}` );
+            await axios.delete(`https://api.trello.com/1/cards/${deleteCardId}?key=${apiKey}&token=${apiToken}`);
             // Update state to remove the deleted list from the 'list' array
             setCardName((prevCard) => prevCard.filter((item) => item.id !== deleteCardId));
         } catch (error) {
@@ -113,19 +117,19 @@ export default function AddCard({id}) {
         }
     };
 
+
+
     return (
         <>
-           
+
             {cardName.map((card) => {
                 return (
-                    <Card key={card.id} className="Card" height="fit-content"  backgroundColor='#e9e9f0' margin='3px'>
-                        <CardHeader>
-                            <Heading size="sm" margin={4} display='flex' justifyContent='space-between'>
-                                {card.name}
-                                <Button onClick={() => setDeleteCardId(card.id)}>x</Button>
-
-                            </Heading>
-
+                    <Card key={card.id} className='Card' backgroundColor='#e9e9f0'>
+                        <CardHeader display='flex' justifyContent='space-between' alignItems='center'>
+                            <PopUpCard id={card.id} name={card.name} />
+                            <Button size='sm' colorScheme='red' onClick={() => setDeleteCardId(card.id)}>
+                                x
+                            </Button>
                         </CardHeader>
                     </Card>
                 )
@@ -139,12 +143,18 @@ export default function AddCard({id}) {
                     closeOnBlur={false}
                 >
                     <CardHeader>
-                        <Heading size="sm" margin={4}>
-                            <PopoverTrigger>
-                                <Button onClick={() => { addCardInputFn(),onToggle()}}
-                                    width='100%' colorScheme="gray" color='black'>+ Add card here</Button>
-                            </PopoverTrigger>
-                        </Heading>
+                        <PopoverTrigger>
+                            <Button
+                                onClick={() => {
+                                    addCardInputFn();
+                                    onToggle();
+                                }}
+                                width='100%'
+                                colorScheme='teal'
+                            >
+                                + Add card here
+                            </Button>
+                        </PopoverTrigger>
                     </CardHeader>
                     <PopoverContent>
                         <PopoverHeader fontWeight='semibold'>Card</PopoverHeader>

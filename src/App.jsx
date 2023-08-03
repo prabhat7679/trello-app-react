@@ -5,8 +5,7 @@ import Header from './components/Header'
 import Lists from './components/Lists';
 import Boards from './components/Boards'
 import { Route, Routes } from 'react-router-dom';
-import AddCard from './components/AddCard';
-
+import Loader from './components/Loader';
 
 function App() {
 
@@ -36,7 +35,7 @@ function App() {
       })
   }, []);
 
-  const handleAddBoard = (name,backgroundImage) => {
+  const handleAddBoard = (name, backgroundImage) => {
     const newBoard = {
       id: Math.random().toString(),
       name: name,
@@ -51,25 +50,30 @@ function App() {
 
   return (
     <>
-      <Routes>
+      {loading ? (<Loader />) :
+        (
+          <Routes>
 
-        <Route path='/' element={
-          <>
-            <Header />
-            <Boards projects={projects} onAddBoard={handleAddBoard} />
-          </>
-        }>
-        </Route>
+            <Route path='/' element={
+              <>
+                <Header />
+                <Boards projects={projects} onAddBoard={handleAddBoard} />
+              </>
+            }>
+            </Route>
 
-        <Route path='/Board/:id' element={
-          <>
-            <Header />
-            <Lists />
-          </>
-        }></Route>
+            <Route path='/Board/:id' element={
+              <>
+                <Header />
+                <Lists />
+              </>
+            }></Route>
 
 
-      </Routes>
+          </Routes>
+        )
+
+      }
     </>
   )
 }
