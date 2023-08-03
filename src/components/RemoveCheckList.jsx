@@ -11,7 +11,6 @@ import {Popover,
     } from "@chakra-ui/react";
 import axios from "axios";
 
-
 function RemoveCheckList({id, setChecklistName}) {
 
     const initRef = React.useRef()

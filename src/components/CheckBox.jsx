@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, List, ListItem } from "@chakra-ui/react";
 import axios from "axios";
+import CreateCheckBox from "./CreateCheckBox";
 
 
 function CheckBox({ checkListId }) {
   const [checkItems, setCheckItems] = useState([]);
-  // const [updateTrigger, setUpdateTrigger] = useState("");
+  const [updateTrigger, setUpdateTrigger] = useState("");
 
   const apiKey = 'c194712381db71b3c67ec4558c35d43b';
   const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
@@ -30,6 +31,8 @@ function CheckBox({ checkListId }) {
 
         </ListItem>
       ))}
+
+    <CreateCheckBox checkListId={checkListId} setUpdateTrigger={setUpdateTrigger} />
 
     </List>
   );

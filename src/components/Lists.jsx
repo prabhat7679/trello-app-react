@@ -108,7 +108,7 @@ export default function Lists() {
     //   console.log(list)
     const [deleteListId, setDeleteListId] = useState(null);
 
-    const handleDeleteConfirmation = async (listId) => {
+    const deleteConfirmation = async () => {
 
         try {
             await axios.put(`https://api.trello.com/1/lists/${deleteListId}/closed?key=${apiKey}&token=${apiToken}`,
@@ -130,7 +130,7 @@ export default function Lists() {
     // console.log(openLists)
 
     return (
-        <>
+        < >
             <SimpleGrid key={id}
                 spacing={4}
                 margin={20}
@@ -155,9 +155,7 @@ export default function Lists() {
                         </Card>
                     );
 
-
                 })}
-
 
                 <Card className="List" height="fit-content" background={'transparent'} cursor={'pointer'}>
                     <Popover
@@ -215,7 +213,7 @@ export default function Lists() {
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button ref={cancelRef} onClick={() => setDeleteListId(null)}>Cancel</Button>
-                        <Button colorScheme="red" ml={3} onClick={handleDeleteConfirmation}>
+                        <Button colorScheme="red" ml={3} onClick={deleteConfirmation}>
                             Delete
                         </Button>
                     </AlertDialogFooter>

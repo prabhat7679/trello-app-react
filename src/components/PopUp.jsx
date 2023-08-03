@@ -71,7 +71,7 @@ function PopUpCard({ id, name }) {
         <AlertDialogContent>
           <AlertDialogHeader>{name}</AlertDialogHeader>
           <AlertDialogCloseButton />
-          <AlertDialogBody>
+          <AlertDialogBody overflowX='auto'>
             <Stack spacing={5} direction="column">
               {checkList.map((checklist) => {
                 return (

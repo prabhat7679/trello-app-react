@@ -118,7 +118,7 @@ export default function AddCard({ id }) {
         <>
             {cardName.map((card) => {
                 return (
-                    <Card key={card.id} className='Card' backgroundColor='#e9e9f0'>
+                    <Card key={card.id} className='Card' backgroundColor='whiteAlpha.300' margin='5px'>
                         <CardHeader display='flex' justifyContent='space-between' alignItems='center'>
                             
                             <PopUpCard id={card.id} name={card.name} />
