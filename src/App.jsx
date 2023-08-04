@@ -6,6 +6,7 @@ import Lists from './components/Lists';
 import Boards from './components/Boards'
 import { Route, Routes } from 'react-router-dom';
 import Loader from './components/Loader';
+import ErrorPage from './components/ErrorPage';
 
 function App() {
 
@@ -67,6 +68,7 @@ function App() {
                 <Lists />
               </>
             }></Route>
+            <Route path='*' element={<ErrorPage/>}/>
 
           </Routes>
         )
