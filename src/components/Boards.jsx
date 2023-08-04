@@ -60,7 +60,7 @@ const Boards = ({ projects, onAddBoard }) => {
 
   return (
     <>
-      <SimpleGrid
+      <SimpleGrid 
         spacing={4}
         templateColumns='repeat(auto-fill, minmax(400px, 1fr))'
         padding='1em'
@@ -69,8 +69,8 @@ const Boards = ({ projects, onAddBoard }) => {
         {projects.map((board) => {
 
           return (
-            <Link to={`/Board/${board.id}`}>
-              <Card key={board.id} backgroundImage={board.prefs.backgroundImage} height='200px'
+            <Link key={board.id} to={`/Board/${board.id}`}>
+              <Card backgroundImage={board.prefs.backgroundImage} height='200px'
               cursor='pointer'
               borderRadius='8px'
               boxShadow='md'

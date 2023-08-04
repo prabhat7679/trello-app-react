@@ -75,8 +75,8 @@ function PopUpCard({ id, name }) {
             <Stack spacing={5} direction="column">
               {checkList.map((checklist) => {
                 return (
-                  <>
-                    <Heading key={checklist.id}
+                  < div key={checklist.id}>
+                    <Heading 
                       display={"flex"}
                       justifyContent={"space-between"}
                       alignItems={"center"}
@@ -93,7 +93,7 @@ function PopUpCard({ id, name }) {
                     {/* progress bar */}
                     <Progress value={0} />   
                     <CheckBox checkListId={checklist.id}  />
-                  </>
+                  </div>
                 );
               })}
 

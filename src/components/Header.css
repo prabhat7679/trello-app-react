@@ -1,9 +1,11 @@
 .Header{
     display: flex;
     height: 70px;
+    width: 100%;
     align-items: center;
     justify-content: center;
     background-color: rgb(246, 240, 240);
+    position: sticky;
 
 }
 .Backbtn{

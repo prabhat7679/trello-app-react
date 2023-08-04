@@ -17,23 +17,29 @@ function CheckBox({ checkListId }) {
       .get(`https://api.trello.com/1/checklists/${checkListId}/checkItems?key=${apiKey}&token=${apiToken}`)
       .then((response) => {
         setCheckItems(response.data);
-        
+
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  },);
+  },[]);
+
+
+
+
 
   return (
     <List>
       {checkItems.map((item) => (
         <ListItem key={item.id} display="flex" width="2xs" margin="auto" padding='5px' justifyContent="space-between">
-          <Checkbox>{item.name}</Checkbox>
-          <RemoveCheckBox checkListId={checkListId} itemId={item.id} setUpdateTrigger={setUpdateTrigger} /> 
+          <Checkbox>
+            {item.name}
+          </Checkbox>
+          <RemoveCheckBox checkListId={checkListId} itemId={item.id} setUpdateTrigger={setUpdateTrigger} />
         </ListItem>
       ))}
 
-    <CreateCheckBox checkListId={checkListId} setUpdateTrigger={setUpdateTrigger} />
+      <CreateCheckBox checkListId={checkListId} setUpdateTrigger={setUpdateTrigger} />
 
     </List>
   );
