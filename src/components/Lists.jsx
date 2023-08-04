@@ -97,7 +97,7 @@ export default function Lists() {
   };
 
   return (
-    <Flex direction="column" alignItems="center">
+    <Flex direction="column" alignItems="center" backgroundColor='blue.100'>
      
       {/* List elements */}
       <Box flex='1' w="100%" overflowX="auto">

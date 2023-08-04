@@ -5,7 +5,7 @@ import CreateCheckBox from "./CreateCheckBox";
 import RemoveCheckBox from "./RemoveCheckBox";
 
 
-function CheckBox({ checkListId, cardId }) {
+function CheckBox({ checkListId ,cardId}) {
   const [checkItems, setCheckItems] = useState([]);
   const [updateTrigger, setUpdateTrigger] = useState("");
 
@@ -36,7 +36,9 @@ function CheckBox({ checkListId, cardId }) {
         { state: check }
       )
       .then((response) => {
-        setUpdateTrigger(response);
+        // setUpdateTrigger(response);
+        setCheckItems((checkItem)=>[...checkItem])
+        // console.log(updateTrigger)
       })
       .catch((error) => {
         console.error("Error making PUT request:", error);
@@ -44,23 +46,23 @@ function CheckBox({ checkListId, cardId }) {
   }
 
 
-
   return (
     <List>
       {checkItems.map((item) => (
         <ListItem key={item.id} display="flex" width="2xs" margin="auto" padding='5px' justifyContent="space-between">
           <Checkbox defaultChecked={item.state == "complete"}
-            onChange={(e) => {
-              changeCheck(e, item.id);
+            onChange={(event ) => {
+              changeCheck(event, item.id);
             }}
           >
             {item.name}
           </Checkbox>
-          <RemoveCheckBox checkListId={checkListId} itemId={item.id} setUpdateTrigger={setUpdateTrigger} />
+
+          <RemoveCheckBox checkListId={checkListId} itemId={item.id} checkItems={checkItems} setCheckItems={setCheckItems} />
         </ListItem>
       ))}
 
-      <CreateCheckBox checkListId={checkListId} setUpdateTrigger={setUpdateTrigger} />
+      <CreateCheckBox checkListId={checkListId} setCheckItems={setCheckItems} />
 
     </List>
   );

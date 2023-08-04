@@ -72,16 +72,17 @@ function PopUpCard({ id, name }) {
           <AlertDialogHeader>{name}</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody overflowX='auto'>
-            <Stack spacing={5} direction="column">
+            <Stack spacing={5} direction="column" >
               {checkList.map((checklist) => {
                 return (
-                  < div key={checklist.id}>
+                  < div key={checklist.id} >
                     <Heading 
                       display={"flex"}
                       justifyContent={"space-between"}
                       alignItems={"center"}
                       as="h5"
                       size="sm"
+                     
                     >
                       <p>{checklist.name}</p>
 
@@ -91,7 +92,7 @@ function PopUpCard({ id, name }) {
                       />
                     </Heading>
                     {/* progress bar */}
-                    <Progress value={0} />   
+                    {/* <Progress value={0} />    */}
                     <CheckBox checkListId={checklist.id} cardId={checklist.idCard} />
                   </div>
                 );

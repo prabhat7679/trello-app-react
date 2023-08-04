@@ -9,7 +9,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-function CreateCheckBox({checkListId, setUpdateTrigger}) {
+function CreateCheckBox({checkListId, setCheckItems}) {
 
     const apiKey = 'c194712381db71b3c67ec4558c35d43b';
     const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
@@ -21,7 +21,7 @@ function CreateCheckBox({checkListId, setUpdateTrigger}) {
     axios.post(`https://api.trello.com/1/checklists/${checkListId}/checkItems?name=${tempName}&key=${apiKey}&token=${apiToken}`)
     .then(response => {
       console.log('CheckItem created:');
-      setUpdateTrigger(response.data);
+      setCheckItems((oldData)=>[...oldData,response.data]);
     })
     .catch(error => {
       console.error('Error creating box:', error);

@@ -11,7 +11,7 @@ import {Popover,
     } from "@chakra-ui/react";
 import axios from "axios";
 
-function RemoveCheckBox({checkListId,itemId, setUpdate}) {
+function RemoveCheckBox({checkListId,itemId,checkItems, setCheckItems}) {
 
     const apiKey = 'c194712381db71b3c67ec4558c35d43b';
     const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
@@ -22,7 +22,10 @@ function RemoveCheckBox({checkListId,itemId, setUpdate}) {
           `https://api.trello.com/1/checklists/${checkListId}/checkItems/${itemId}?key=${apiKey}&token=${apiToken}`
         )
         .then((response) => {
-          setUpdate(response.data);
+            const newData = checkItems.filter((item)=>{
+                return item.id!==itemId
+            })
+            setCheckItems(newData);
         })
         .catch((error) => {
           console.error("Error updating data:", error);
