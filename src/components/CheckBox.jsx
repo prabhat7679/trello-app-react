@@ -5,7 +5,7 @@ import CreateCheckBox from "./CreateCheckBox";
 import RemoveCheckBox from "./RemoveCheckBox";
 
 
-function CheckBox({ checkListId }) {
+function CheckBox({ checkListId, cardId }) {
   const [checkItems, setCheckItems] = useState([]);
   const [updateTrigger, setUpdateTrigger] = useState("");
 
@@ -25,6 +25,23 @@ function CheckBox({ checkListId }) {
   },[]);
 
 
+  function changeCheck(event, checkId) {
+    let check = "incomplete";
+    if (event.target.checked) {
+      check = "complete";
+    }
+    axios
+      .put(
+        `https://api.trello.com/1/cards/${cardId}/checkItem/${checkId}?key=${apiKey}&token=${apiToken}`,
+        { state: check }
+      )
+      .then((response) => {
+        setUpdateTrigger(response);
+      })
+      .catch((error) => {
+        console.error("Error making PUT request:", error);
+      });
+  }
 
 
 
@@ -32,7 +49,11 @@ function CheckBox({ checkListId }) {
     <List>
       {checkItems.map((item) => (
         <ListItem key={item.id} display="flex" width="2xs" margin="auto" padding='5px' justifyContent="space-between">
-          <Checkbox>
+          <Checkbox defaultChecked={item.state == "complete"}
+            onChange={(e) => {
+              changeCheck(e, item.id);
+            }}
+          >
             {item.name}
           </Checkbox>
           <RemoveCheckBox checkListId={checkListId} itemId={item.id} setUpdateTrigger={setUpdateTrigger} />

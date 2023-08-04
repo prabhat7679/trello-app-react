@@ -92,7 +92,7 @@ function PopUpCard({ id, name }) {
                     </Heading>
                     {/* progress bar */}
                     <Progress value={0} />   
-                    <CheckBox checkListId={checklist.id}  />
+                    <CheckBox checkListId={checklist.id} cardId={checklist.idCard} />
                   </div>
                 );
               })}
