@@ -26,7 +26,7 @@ function PopUpCard({ id, name }) {
   // console.log(id, 'and', name);
   const [checkList, setCheckList] = useState([]);
   const [checklistName, setChecklistName] = useState("");
-  const [length, setLength] = useState(0);
+  
   const cancelRef = React.useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

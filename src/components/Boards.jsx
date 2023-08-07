@@ -45,7 +45,7 @@ const Boards = ({ projects, onAddBoard }) => {
         onAddBoard(newBoardName, response.data.prefs.backgroundImage)
 
         // The response will contain the details of the newly created board on Trello
-        console.log('New board created on Trello:', response.data);
+        // console.log('New board created on Trello:', response.data);
 
 
       } catch (error) {
