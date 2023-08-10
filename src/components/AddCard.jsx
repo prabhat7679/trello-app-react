@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-
-import { useParams } from 'react-router-dom'
 import axios from 'axios';
-import { Card, SimpleGrid, CardHeader, Heading, useDisclosure } from '@chakra-ui/react';
-import { InputGroup, Input, InputRightElement, Button, ButtonGroup } from '@chakra-ui/react';
+import { Card, CardHeader} from '@chakra-ui/react';
+import {  Button, ButtonGroup } from '@chakra-ui/react';
 
 import {
     Popover,
@@ -15,7 +12,6 @@ import {
     PopoverFooter,
     PopoverArrow,
     PopoverCloseButton,
-    PopoverAnchor,
 } from '@chakra-ui/react'
 
 import {
@@ -28,18 +24,18 @@ import {
     AlertDialogCloseButton,
 } from '@chakra-ui/react'
 import PopUpCard from './PopUp';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCard, deleteCard, setCards } from '../Store/Slice/CardSlice';
 
 export default function AddCard({ id }) {
 
-    const [isOpen, setIsOpen] = useState(false)
-    const [cardName, setCardName] = useState([]);
-    const [newCard, setNewCard] = useState('')
+    const dispatch = useDispatch();
+    const cardName = useSelector((state) => state.cards.cardName);
 
+    const [isOpen, setIsOpen] = useState(false)
+    const [newCard, setNewCard] = useState('')
     const [deleteCardId, setDeleteCardId] = useState(null);
     const cancelRef = React.useRef()
-
-    // const id = useParams().id;
-    // console.log(id)
 
     const apiKey = 'c194712381db71b3c67ec4558c35d43b';
     const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
@@ -48,26 +44,23 @@ export default function AddCard({ id }) {
         axios.get(
             `https://api.trello.com/1/lists/${id}/cards?key=${apiKey}&token=${apiToken}`)
             .then((response) => {
-                setCardName(response.data);
-                // console.log(response.data)
+                dispatch(setCards({ 'id': id, 'data': response.data }));
             })
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
     }, []);
 
-
     const addCardFn = async () => {
 
         if (newCard.trim() !== '') {
             const card = newCard.trim();
-            // console.log(newCard)
             try {
                 const response = await axios.post(
 
                     `https://api.trello.com/1/cards?idList=${id}&key=${apiKey}&token=${apiToken}`, { name: newCard })
 
-                setCardName([...cardName, response.data]);
+                dispatch(addCard({ 'id': id, 'data': response.data }))
 
             } catch (error) {
                 console.error('Error creating list on Trello:', error);
@@ -104,8 +97,13 @@ export default function AddCard({ id }) {
     const deleteConfirmation = async () => {
         try {
             await axios.delete(`https://api.trello.com/1/cards/${deleteCardId}?key=${apiKey}&token=${apiToken}`);
-            // Update state to remove the deleted list from the 'list' array
-            setCardName((prevCard) => prevCard.filter((item) => item.id !== deleteCardId));
+
+            let newData = cardName[id].filter((card) => {
+
+                return card.id !== deleteCardId
+            })
+            dispatch((deleteCard({ 'id': id, 'data': newData })))
+
         } catch (error) {
             console.error('Error deleting list from Trello:', error);
         } finally {
@@ -113,14 +111,14 @@ export default function AddCard({ id }) {
         }
     };
 
-
     return (
         <>
-            {cardName.map((card) => {
+            {cardName[id] && cardName[id].map((card) => {
                 return (
+                    card.idList == id &&
                     <Card key={card.id} className='Card' backgroundColor='whiteAlpha.300' margin='5px'>
                         <CardHeader display='flex' justifyContent='space-between' alignItems='center'>
-                            
+
                             <PopUpCard id={card.id} name={card.name} />
 
                             <Button size='sm' colorScheme='red' onClick={() => setDeleteCardId(card.id)}>

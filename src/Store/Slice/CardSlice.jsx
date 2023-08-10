@@ -2,14 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const cardSlice = createSlice({
     name:'cards',
-    initialState:[],
+    initialState:{
+        cardName:{}
+    },
     reducers:{
-        setCards:(state, action)=>action.payload,
-        addCard :(state, action)=>[...state, action.payload],
-        deleteCard :(state, action)=>
-        state.filter((card)=>{
-            return card.id !== action.payload
-        })
+        setCards:(state, action)=>{
+            state.cardName[action.payload.id]=action.payload.data;
+        },
+        addCard: (state, action) => {
+            state.cardName[action.payload.id] = [...state.cardName[action.payload.id], action.payload.data]
+        },
+        deleteCard: (state, action) => {
+            state.cardName[action.payload.id]=action.payload.data;
+        }
+        
     }
 })
 
