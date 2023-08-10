@@ -3,31 +3,29 @@ import { Card, CardBody, SimpleGrid } from '@chakra-ui/react';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBoards,setModel,setNewBoard} from '../Store/Slice/BoardSlice';
 
 
-const Boards = ({ projects, onAddBoard }) => {
+const Boards = () => {
 
-  const [newBoardName, setNewBoardName] = useState('');
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const projects = useSelector((state)=>state.boards.projects);
+  const modalIsOpen = useSelector((state)=>state.boards.setModalIsOpen);
+  const newBoardName= useSelector((state)=>state.boards.setNewBoardName);
+  
+  const dispatch =useDispatch();
 
   const handleShowAddBoardInput = () => {
 
-    setModalIsOpen(true)
+    dispatch(setModel(true))
   };
 
   const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-
-  const cancelAddBoardFn = () => {
-
-    setNewBoardName('');
-    closeModal()
+    dispatch(setModel(false));
   };
 
   const boardNameChangeFn = (event) => {
-    setNewBoardName(event.target.value);
+    dispatch(setNewBoard(event.target.value));
   };
 
   const addBoardFn = async () => {
@@ -42,18 +40,16 @@ const Boards = ({ projects, onAddBoard }) => {
           `https://api.trello.com/1/boards?key=${apiKey}&token=${apiToken}&name=${boardName}`
         );
 
-        onAddBoard(newBoardName, response.data.prefs.backgroundImage)
+        
+        dispatch(addBoards([...projects,response.data]))
 
-        // The response will contain the details of the newly created board on Trello
-        console.log('New board created on Trello:', response.data);
-
+        // console.log('New board created on Trello:', response.data);
 
       } catch (error) {
         console.error('Error creating board on Trello:', error);
       }
 
       closeModal();
-      setNewBoardName('');
     }
   };
 
@@ -123,8 +119,8 @@ const Boards = ({ projects, onAddBoard }) => {
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1em' }}>
 
           <button onClick={addBoardFn}>Add</button>
+          
 
-          <button onClick={cancelAddBoardFn}>Cancel</button>
         </div>
       </Modal>
     </>

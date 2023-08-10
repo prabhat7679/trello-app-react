@@ -20,14 +20,20 @@ import { Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, Po
 import { AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, AlertDialogCloseButton } from '@chakra-ui/react';
 import AddCard from './AddCard';
 
+import { setList, addToList, removeFromList } from '../Store/Slice/ListSlice';
+import { useSelector, useDispatch } from 'react-redux';
+
 export default function Lists() {
   const { onOpen } = useDisclosure();
   const cancelRef = React.useRef();
 
-  const [list, setList] = useState([]);
+  // const [list, setList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [newListName, setNewListName] = useState('');
   const id = useParams().id;
+
+  const dispatch = useDispatch();
+  const list = useSelector((state)=>state.lists.listData);
 
   const apiKey = 'c194712381db71b3c67ec4558c35d43b';
   const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
@@ -35,7 +41,7 @@ export default function Lists() {
   useEffect(() => {
     axios.get(`https://api.trello.com/1/boards/${id}/lists/?key=${apiKey}&token=${apiToken}`)
       .then((response) => {
-        setList(response.data);
+        dispatch(setList(response.data));
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -49,7 +55,8 @@ export default function Lists() {
         const response = await axios.post(
           `https://api.trello.com/1/lists?name=${listName}&idBoard=${id}&key=${apiKey}&token=${apiToken}`
         );
-        setList([...list, response.data]);
+        // setList([...list, response.data]);
+        dispatch(addToList(response.data))
       } catch (error) {
         console.error('Error creating list on Trello:', error);
       }
@@ -80,15 +87,19 @@ export default function Lists() {
   };
 
   const [deleteListId, setDeleteListId] = useState(null);
+  // const deleteListId= '';
 
   const deleteConfirmation = async () => {
     try {
-      await axios.put(
+     await axios.put(
         `https://api.trello.com/1/lists/${deleteListId}/closed?key=${apiKey}&token=${apiToken}`,
         { value: true }
-      );
-      // Update state to remove the deleted list from the 'list' array
-      setList((prevList) => prevList.filter((item) => item.id !== deleteListId));
+      ).then((response)=>{
+        console.log(response.data.id)
+        let updatedList = list.filter((item)=>item.id != response.data.id)
+        dispatch(removeFromList(updatedList))
+        console.log(updatedList)
+      })
     } catch (error) {
       console.error('Error deleting list from Trello:', error);
     } finally {
