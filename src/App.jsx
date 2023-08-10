@@ -10,6 +10,7 @@ import ErrorPage from './components/ErrorPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBoards, addBoards} from './Store/Slice/BoardSlice';
 import { setLoading, setError} from './Store/Slice/LoadingError';
+const {VITE_KEY, VITE_TOKEN} =import.meta.env;
 function App() {
 
 
@@ -21,7 +22,9 @@ function App() {
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState(null);
 
-  const mainUrl = 'https://api.trello.com/1/members/me/boards?key=c194712381db71b3c67ec4558c35d43b&token=ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
+  // const mainUrl = 'https://api.trello.com/1/members/me/boards?key=c194712381db71b3c67ec4558c35d43b&token=ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
+
+  const mainUrl = `https://api.trello.com/1/members/me/boards?key=${VITE_KEY}&token=${VITE_TOKEN}`;
 
   useEffect(() => {
     axios.get(mainUrl)

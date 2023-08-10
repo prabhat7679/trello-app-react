@@ -7,22 +7,35 @@ import {
   InputGroup,
   InputRightElement,
   Button,
+  useToast,
 } from "@chakra-ui/react";
+
+const {VITE_KEY, VITE_TOKEN} =import.meta.env;
+
 
 function CreateCheckList({id, setChecklistName}) {
 
     const [tempName, setTempName] = useState('');
-    const apiKey = 'c194712381db71b3c67ec4558c35d43b';
-    const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
-    
+    const toast= useToast();
+   
     async function createCheckList(tempName) {
       if (tempName.length >= 2) {
         try {
           const response = await axios.post(
-            `https://api.trello.com/1/checklists?idCard=${id}&key=${apiKey}&token=${apiToken}`,
+            `https://api.trello.com/1/checklists?idCard=${id}&key=${VITE_KEY}&token=${VITE_TOKEN}`,
             { name: tempName }
           );
           setChecklistName(response.data);
+
+          toast({
+            title: 'CheckList Created ',
+            description: 'The checklist has been created successfully .',
+            status: 'success',
+            duration: 2000, 
+            isClosable: true,
+          });
+
+
         } catch (error) {
           console.error('Error creating board:', error);
         }

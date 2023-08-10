@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { Card, CardHeader} from '@chakra-ui/react';
+import { Card, CardHeader, useToast} from '@chakra-ui/react';
 import {  Button, ButtonGroup } from '@chakra-ui/react';
 
 import {
@@ -26,6 +26,7 @@ import {
 import PopUpCard from './PopUp';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCard, deleteCard, setCards } from '../Store/Slice/CardSlice';
+const {VITE_KEY, VITE_TOKEN} =import.meta.env;
 
 export default function AddCard({ id }) {
 
@@ -36,13 +37,11 @@ export default function AddCard({ id }) {
     const [newCard, setNewCard] = useState('')
     const [deleteCardId, setDeleteCardId] = useState(null);
     const cancelRef = React.useRef()
-
-    const apiKey = 'c194712381db71b3c67ec4558c35d43b';
-    const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
+    const toast=useToast();
 
     useEffect(() => {
         axios.get(
-            `https://api.trello.com/1/lists/${id}/cards?key=${apiKey}&token=${apiToken}`)
+            `https://api.trello.com/1/lists/${id}/cards?key=${VITE_KEY}&token=${VITE_TOKEN}`)
             .then((response) => {
                 dispatch(setCards({ 'id': id, 'data': response.data }));
             })
@@ -58,9 +57,18 @@ export default function AddCard({ id }) {
             try {
                 const response = await axios.post(
 
-                    `https://api.trello.com/1/cards?idList=${id}&key=${apiKey}&token=${apiToken}`, { name: newCard })
+                    `https://api.trello.com/1/cards?idList=${id}&key=${VITE_KEY}&token=${VITE_TOKEN}`, { name: newCard })
 
                 dispatch(addCard({ 'id': id, 'data': response.data }))
+
+                toast({
+                    title: 'Card Created ',
+                    description: 'The card has been created successfully .',
+                    status: 'success',
+                    duration: 2000, 
+                    isClosable: true,
+                  });
+
 
             } catch (error) {
                 console.error('Error creating list on Trello:', error);
@@ -96,13 +104,22 @@ export default function AddCard({ id }) {
 
     const deleteConfirmation = async () => {
         try {
-            await axios.delete(`https://api.trello.com/1/cards/${deleteCardId}?key=${apiKey}&token=${apiToken}`);
+            await axios.delete(`https://api.trello.com/1/cards/${deleteCardId}?key=${VITE_KEY}&token=${VITE_TOKEN}`);
 
             let newData = cardName[id].filter((card) => {
 
                 return card.id !== deleteCardId
             })
-            dispatch((deleteCard({ 'id': id, 'data': newData })))
+            dispatch((deleteCard({ 'id': id, 'data': newData })));
+
+            toast({
+                title: 'Card Deleted ',
+                description: 'The card has been deleted successfully .',
+                status: 'success',
+                duration: 2000, 
+                isClosable: true,
+              });
+
 
         } catch (error) {
             console.error('Error deleting list from Trello:', error);

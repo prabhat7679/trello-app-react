@@ -4,17 +4,14 @@ import axios from "axios";
 import CreateCheckBox from "./CreateCheckBox";
 import RemoveCheckBox from "./RemoveCheckBox";
 
+const {VITE_KEY, VITE_TOKEN} =import.meta.env;
 
 function CheckBox({ checkListId ,cardId}) {
   const [checkItems, setCheckItems] = useState([]);
-  const [updateTrigger, setUpdateTrigger] = useState("");
-
-  const apiKey = 'c194712381db71b3c67ec4558c35d43b';
-  const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
 
   useEffect(() => {
     axios
-      .get(`https://api.trello.com/1/checklists/${checkListId}/checkItems?key=${apiKey}&token=${apiToken}`)
+      .get(`https://api.trello.com/1/checklists/${checkListId}/checkItems?key=${VITE_KEY}&token=${VITE_TOKEN}`)
       .then((response) => {
         setCheckItems(response.data);
 
@@ -24,7 +21,6 @@ function CheckBox({ checkListId ,cardId}) {
       });
   },[]);
 
-
   function changeCheck(event, checkId) {
     let check = "incomplete";
     if (event.target.checked) {
@@ -32,13 +28,14 @@ function CheckBox({ checkListId ,cardId}) {
     }
     axios
       .put(
-        `https://api.trello.com/1/cards/${cardId}/checkItem/${checkId}?key=${apiKey}&token=${apiToken}`,
+        `https://api.trello.com/1/cards/${cardId}/checkItem/${checkId}?key=${VITE_KEY}&token=${VITE_TOKEN}`,
         { state: check }
       )
       .then((response) => {
         // setUpdateTrigger(response);
         setCheckItems((checkItem)=>[...checkItem])
         // console.log(updateTrigger)
+
       })
       .catch((error) => {
         console.error("Error making PUT request:", error);

@@ -5,13 +5,16 @@ import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBoards,setModel,setNewBoard} from '../Store/Slice/BoardSlice';
-
+const {VITE_KEY, VITE_TOKEN} =import.meta.env;
+import { useToast } from '@chakra-ui/react'
 
 const Boards = () => {
 
   const projects = useSelector((state)=>state.boards.projects);
   const modalIsOpen = useSelector((state)=>state.boards.setModalIsOpen);
   const newBoardName= useSelector((state)=>state.boards.setNewBoardName);
+
+  const toast = useToast();
   
   const dispatch =useDispatch();
 
@@ -31,19 +34,21 @@ const Boards = () => {
   const addBoardFn = async () => {
     if (newBoardName.trim() !== '') {
 
-      const apiKey = 'c194712381db71b3c67ec4558c35d43b';
-      const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
       const boardName = newBoardName.trim();
-
       try {
         const response = await axios.post(
-          `https://api.trello.com/1/boards?key=${apiKey}&token=${apiToken}&name=${boardName}`
+          `https://api.trello.com/1/boards?key=${VITE_KEY}&token=${VITE_TOKEN}&name=${boardName}`
         );
 
-        
         dispatch(addBoards([...projects,response.data]))
 
-        // console.log('New board created on Trello:', response.data);
+        toast({
+          title: 'Board Created ',
+          description: 'The board has been created successfully .',
+          status: 'success',
+          duration: 1000, 
+          isClosable: true,
+        });
 
       } catch (error) {
         console.error('Error creating board on Trello:', error);
@@ -119,8 +124,8 @@ const Boards = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1em' }}>
 
           <button onClick={addBoardFn}>Add</button>
+          <button onClick={addBoardFn}>Cancel</button>
           
-
         </div>
       </Modal>
     </>

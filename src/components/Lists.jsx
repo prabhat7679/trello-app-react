@@ -15,6 +15,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
 } from '@chakra-ui/react';
 import { Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverBody, PopoverFooter, PopoverArrow, PopoverCloseButton } from '@chakra-ui/react';
 import { AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, AlertDialogCloseButton } from '@chakra-ui/react';
@@ -22,12 +23,13 @@ import AddCard from './AddCard';
 
 import { setList, addToList, removeFromList } from '../Store/Slice/ListSlice';
 import { useSelector, useDispatch } from 'react-redux';
+const {VITE_KEY, VITE_TOKEN} =import.meta.env;
 
 export default function Lists() {
   const { onOpen } = useDisclosure();
   const cancelRef = React.useRef();
 
-  // const [list, setList] = useState([]);
+  const toast= useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [newListName, setNewListName] = useState('');
   const id = useParams().id;
@@ -35,11 +37,8 @@ export default function Lists() {
   const dispatch = useDispatch();
   const list = useSelector((state)=>state.lists.listData);
 
-  const apiKey = 'c194712381db71b3c67ec4558c35d43b';
-  const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
-
   useEffect(() => {
-    axios.get(`https://api.trello.com/1/boards/${id}/lists/?key=${apiKey}&token=${apiToken}`)
+    axios.get(`https://api.trello.com/1/boards/${id}/lists/?key=${VITE_KEY}&token=${VITE_TOKEN}`)
       .then((response) => {
         dispatch(setList(response.data));
       })
@@ -53,10 +52,19 @@ export default function Lists() {
       const listName = newListName.trim();
       try {
         const response = await axios.post(
-          `https://api.trello.com/1/lists?name=${listName}&idBoard=${id}&key=${apiKey}&token=${apiToken}`
+          `https://api.trello.com/1/lists?name=${listName}&idBoard=${id}&key=${VITE_KEY}&token=${VITE_TOKEN}`
         );
         // setList([...list, response.data]);
         dispatch(addToList(response.data))
+
+        toast({
+          title: 'List Created ',
+          description: 'The list has been created successfully .',
+          status: 'success',
+          duration: 2000, 
+          isClosable: true,
+        });
+
       } catch (error) {
         console.error('Error creating list on Trello:', error);
       }
@@ -92,13 +100,21 @@ export default function Lists() {
   const deleteConfirmation = async () => {
     try {
      await axios.put(
-        `https://api.trello.com/1/lists/${deleteListId}/closed?key=${apiKey}&token=${apiToken}`,
+        `https://api.trello.com/1/lists/${deleteListId}/closed?key=${VITE_KEY}&token=${VITE_TOKEN}`,
         { value: true }
       ).then((response)=>{
         console.log(response.data.id)
         let updatedList = list.filter((item)=>item.id != response.data.id)
         dispatch(removeFromList(updatedList))
-        console.log(updatedList)
+        
+        toast({
+          title: 'List Deleted ',
+          description: 'The list has been deleted successfully .',
+          status: 'success',
+          duration: 2000, 
+          isClosable: true,
+        });
+
       })
     } catch (error) {
       console.error('Error deleting list from Trello:', error);

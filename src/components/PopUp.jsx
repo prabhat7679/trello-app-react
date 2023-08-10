@@ -21,6 +21,7 @@ import axios from "axios";
 import CreateCheckList from "./CreateCheckList";
 import RemoveCheckList from "./RemoveCheckList";
 import CheckBox from "./CheckBox";
+const {VITE_KEY, VITE_TOKEN} =import.meta.env;
 
 function PopUpCard({ id, name }) {
   // console.log(id, 'and', name);
@@ -30,13 +31,10 @@ function PopUpCard({ id, name }) {
   const cancelRef = React.useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const apiKey = 'c194712381db71b3c67ec4558c35d43b';
-  const apiToken = 'ATTA1c252a69417363daf13b310d3e4cdcfabd6b6edbdecfca215fd3ff8207d6befa5C3B7B4C';
-
   useEffect(() => {
     axios
       .get(
-        `https://api.trello.com/1/cards/${id}/checklists?key=${apiKey}&token=${apiToken}`
+        `https://api.trello.com/1/cards/${id}/checklists?key=${VITE_KEY}&token=${VITE_TOKEN}`
       )
       .then((response) => {
         setCheckList(response.data);
